@@ -31,4 +31,7 @@ jobs:
             **/.git*
             **/.git*/**
             **/vendor/**
-            .env
+            **/.env
+            **/.editorconfig
+            **/phpunit.xml
+            **/README.md
