@@ -106,8 +106,21 @@ class Api_Anuness_Dev_Public
      *
      * @since    1.0.0
      */
-    public function change_rest_url_prefix($slug)
+    public function change_rest_url_prefix()
     {
         return 'rest';
+    }
+
+    /**
+     * Modify the REST API URL prefix for the 'ringles' function
+     *
+     * @since    1.0.0
+     */
+    public function redirect_to_login_when_not_logged_in()
+    {
+        if (!is_user_logged_in()) {
+            wp_redirect(wp_login_url());
+            exit;
+        }
     }
 }

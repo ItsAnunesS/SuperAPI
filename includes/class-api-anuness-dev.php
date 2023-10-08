@@ -174,6 +174,7 @@ class Api_Anuness_Dev
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+        $this->loader->add_action('template_redirect', $plugin_public, 'redirect_to_login_when_not_logged_in');
         $this->loader->add_filter('rest_url_prefix', $plugin_public, 'change_rest_url_prefix');
     }
 
