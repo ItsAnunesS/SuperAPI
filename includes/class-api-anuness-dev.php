@@ -80,6 +80,7 @@ class Api_Anuness_Dev
         $this->set_locale();
         $this->define_admin_hooks();
         $this->define_public_hooks();
+        $this->define_api_hooks();
     }
 
     /**
@@ -105,24 +106,35 @@ class Api_Anuness_Dev
          * The class responsible for orchestrating the actions and filters of the
          * core plugin.
          */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-api-anuness-dev-loader.php';
+        require_once API_ANUNESS_DEV_PLUGIN_DIR . 'includes/class-api-anuness-dev-loader.php';
 
         /**
          * The class responsible for defining internationalization functionality
          * of the plugin.
          */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-api-anuness-dev-i18n.php';
+        require_once API_ANUNESS_DEV_PLUGIN_DIR . 'includes/class-api-anuness-dev-i18n.php';
 
         /**
          * The class responsible for defining all actions that occur in the admin area.
          */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-api-anuness-dev-admin.php';
+        require_once API_ANUNESS_DEV_PLUGIN_DIR . 'admin/class-api-anuness-dev-admin.php';
 
         /**
          * The class responsible for defining all actions that occur in the public-facing
          * side of the site.
          */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-api-anuness-dev-public.php';
+        require_once API_ANUNESS_DEV_PLUGIN_DIR . 'public/class-api-anuness-dev-public.php';
+
+        /**
+         * The class responsible for defining all actions that occur in the public-facing
+         * side of the site.
+         */
+        require_once API_ANUNESS_DEV_PLUGIN_DIR . 'public/class-api-anuness-dev-public.php';
+
+        /**
+         *  The class responsible for the API endpoints.
+         */
+        require_once API_ANUNESS_DEV_PLUGIN_DIR . 'includes/class-api-anuness-dev-api.php';
 
         $this->loader = new Api_Anuness_Dev_Loader();
     }
@@ -176,6 +188,20 @@ class Api_Anuness_Dev
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
         $this->loader->add_action('template_redirect', $plugin_public, 'redirect_to_login_when_not_logged_in');
         $this->loader->add_filter('rest_url_prefix', $plugin_public, 'change_rest_url_prefix');
+    }
+
+    /**
+     * Register all of the hooks related to the API functionality
+     *
+     * @since    1.0.0
+     */
+    private function define_api_hooks()
+    {
+        $api_dir = API_ANUNESS_DEV_PLUGIN_DIR . 'api/';
+        if (!is_dir($api_dir)) new WP_Error('api_anuness_dev_api_dir_not_found', 'API directory not found');
+        $plugin_api = new Api_Anuness_Dev_Api($api_dir);
+
+        $this->loader->add_action('rest_api_init', $plugin_api, 'init');
     }
 
     /**
