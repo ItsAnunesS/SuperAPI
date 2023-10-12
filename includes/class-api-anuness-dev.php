@@ -80,6 +80,8 @@ class Api_Anuness_Dev
         $this->set_locale();
         $this->define_admin_hooks();
         $this->define_public_hooks();
+        $this->define_settings_hooks();
+        $this->define_cpt_hooks();
         $this->define_api_hooks();
     }
 
@@ -126,10 +128,19 @@ class Api_Anuness_Dev
         require_once API_ANUNESS_DEV_PLUGIN_DIR . 'public/class-api-anuness-dev-public.php';
 
         /**
-         * The class responsible for defining all actions that occur in the public-facing
-         * side of the site.
+         * The class responsible for defining all settings that occur in the admin area.
          */
-        require_once API_ANUNESS_DEV_PLUGIN_DIR . 'public/class-api-anuness-dev-public.php';
+        require_once API_ANUNESS_DEV_PLUGIN_DIR . 'admin/class-api-anuness-dev-settings.php';
+
+        /**
+         * The class responsible for the CPT's.
+         */
+        require_once API_ANUNESS_DEV_PLUGIN_DIR . 'includes/class-api-anuness-dev-cpt.php';
+
+        /**
+         * The class responsible for the OpenAI Integration
+         */
+        require_once API_ANUNESS_DEV_PLUGIN_DIR . 'includes/class-api-anuness-dev-openai.php';
 
         /**
          *  The class responsible for the API endpoints.
@@ -173,6 +184,16 @@ class Api_Anuness_Dev
     }
 
     /**
+     *
+     */
+    private function define_settings_hooks()
+    {
+        $plugin_settings = new Api_Anuness_Dev_Settings();
+
+        $this->loader->add_action('carbon_fields_register_fields', $plugin_settings, 'init');
+    }
+
+    /**
      * Register all of the hooks related to the public-facing functionality
      * of the plugin.
      *
@@ -202,6 +223,20 @@ class Api_Anuness_Dev
         $plugin_api = new Api_Anuness_Dev_Api($api_dir);
 
         $this->loader->add_action('rest_api_init', $plugin_api, 'init');
+    }
+
+    /**
+     * Register all the hooks related to the CPT's
+     *
+     * @since    1.0.0
+     */
+    private function define_cpt_hooks()
+    {
+        $cpt_dir = API_ANUNESS_DEV_PLUGIN_DIR . 'cpt/';
+        if (!is_dir($cpt_dir)) new WP_Error('api_anuness_dev_cpt_dir_not_found', 'CPT directory not found');
+        $plugin_cpt = new Api_Anuness_Dev_CPT($cpt_dir);
+
+        $this->loader->add_action('carbon_fields_register_fields', $plugin_cpt, 'init');
     }
 
     /**

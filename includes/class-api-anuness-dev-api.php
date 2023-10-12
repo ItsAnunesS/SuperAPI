@@ -7,7 +7,7 @@ class Api_Anuness_Dev_Api
 
     public function __construct($api_base_dir)
     {
-        $endpoints_class_file = API_ANUNESS_DEV_PLUGIN_DIR . 'api/class-api-anuness-dev-endpoints.php';
+        $endpoints_class_file = API_ANUNESS_DEV_PLUGIN_DIR . 'api/abstract-api-anuness-dev-endpoints.php';
 
         if (!file_exists($endpoints_class_file)) new WP_Error('api_anuness_dev_endpoints_class_not_found', 'Endpoints class not found');
 

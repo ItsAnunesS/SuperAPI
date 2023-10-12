@@ -76,6 +76,8 @@ class Api_Anuness_Dev_Public
          */
 
         wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/api-anuness-dev-public.css', array(), $this->version, 'all');
+
+        wp_enqueue_style('TailwindCSS', API_ANUNESS_DEV_PLUGIN_URL . 'assets/css/tailwind.css', array(), current_time('timestamp'), 'all');
     }
 
     /**

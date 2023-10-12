@@ -1,0 +1,6 @@
+{
+    "require": {
+        "htmlburger/carbon-fields": "^3.6",
+        "orhanerday/open-ai": "^4.8"
+    }
+}

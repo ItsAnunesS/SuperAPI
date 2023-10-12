@@ -83,4 +83,31 @@ function run_api_anuness_dev()
     $plugin = new Api_Anuness_Dev();
     $plugin->run();
 }
-run_api_anuness_dev();
+
+
+$composer_autoload = API_ANUNESS_DEV_PLUGIN_DIR . 'vendor/autoload.php';
+if (file_exists($composer_autoload)) {
+    require_once $composer_autoload;
+    if (class_exists('\Carbon_Fields\Carbon_Fields')) {
+        add_action('after_setup_theme', function () {
+            \Carbon_Fields\Carbon_Fields::boot();
+        });
+        run_api_anuness_dev();
+    }
+} else {
+    add_action(
+        'admin_enqueue_scripts',
+        function () {
+            wp_enqueue_style('TailwindCSS', API_ANUNESS_DEV_PLUGIN_URL . 'assets/css/tailwind.css', array(), current_time('timestamp'), 'all');
+        }
+    );
+    add_action('admin_notices', function () {
+        printf(
+            '<div class="spapi-container spapi-alert spapi-alert-error spapi-max-w-2xl spapi-my-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="spapi-stroke-current spapi-shrink-0 spapi-h-6 spapi-w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <p>%s</p>
+            </div>',
+            __('SuperAPI: Please run composer install to install the dependencies', 'api-anuness-dev')
+        );
+    });
+}

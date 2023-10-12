@@ -99,5 +99,7 @@ class Api_Anuness_Dev_Admin
          */
 
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/api-anuness-dev-admin.js', array('jquery'), $this->version, false);
+
+        wp_enqueue_style('TailwindCSS', API_ANUNESS_DEV_PLUGIN_URL . 'assets/css/tailwind.css', array(), current_time('timestamp'), 'all');
     }
 }
